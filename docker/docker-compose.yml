@@ -1,0 +1,9 @@
+services:
+  nodejs:
+    image: node:23
+    volumes:
+      - ../:/app/discordBot
+    ports:
+      - 3000:3000
+    command: >
+      bash -c "cd /app/discordBot && npm install && npm run prod"

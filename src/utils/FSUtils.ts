@@ -13,7 +13,7 @@ class ReaderUtils {
     }
 
     public static writeFile(fileData: NodeJS.ArrayBufferView, fileName: string) {
-        const filePath = path.resolve(DEFAULT_PATH, fileName);
+        const filePath = path.resolve(DEFAULT_PATH, fileName.replace(' ',''));
         fs.writeFileSync(filePath, fileData);
     }
 }
