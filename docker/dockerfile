@@ -1,0 +1,3 @@
+FROM node:23
+RUN apt update && apt upgrade
+RUN apt install ffmpeg -y
