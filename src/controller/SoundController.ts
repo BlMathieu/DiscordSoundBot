@@ -22,7 +22,6 @@ class SoundPlayer {
 
         if (!audioFiles.includes(soundName)) throw new Error("Sound does not exists !");
 
-        //const ressource = createAudioResource(filePath);
         const ressource = this.createFastAudioResource(filePath, speed);
         this.player.play(ressource);
         return this.player;
@@ -39,7 +38,7 @@ class SoundPlayer {
         ]);
 
         return createAudioResource(ffmpeg.stdout, {
-            inputType: StreamType.Raw
+            inputType: StreamType.Raw,
         });
     }
 }

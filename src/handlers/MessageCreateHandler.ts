@@ -14,12 +14,48 @@ class MessageCreateHandler extends AbstractHandler {
         try {
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
+            const isEmote = message.content.toLocaleLowerCase().startsWith(">emote");
             const isList = message.content.toLowerCase().startsWith('>list');
             const askHelp = message.content.toLowerCase().startsWith('>help') || message.content.toLowerCase() == '>';
             const isStop = message.content.toLowerCase().startsWith(">stop");
             const isPlay = message.content.toLowerCase().startsWith('>play');
             const needChannel = isPlay || isStop;
 
+            if (isEmote) message.reply(` ⢸
+
+⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣶⣄
+
+⢿⣿⣄⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣄
+
+⠀⠹⣿⣧⣀⣠⣴⣾⣷⣿⣷⠾⢷⠋⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⡷
+
+⠀⠀⠈⢿⡿⠟⢻⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⡟
+
+⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⡟⢿⣿⣄⠀⠀⠀⠀⢠⣶⣾⣿⡇
+
+⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡇⠀⠙⠿⡿⢆⣴⣿⣿⣿⣿⡇
+
+⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⠀⠀⣤⣶⣾⣿⣿⣿⣿⣷⠹⣷⣤⣤⣄⣀⡀
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡏⣿⣿⣿⢀⣾⣿⣿⣿⣿⣏⠀⠀⢀⣀⣈⣉⣉⣉⣙⣁⣀
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⢏⣾⣿⣿⣿⣿⣿⣿⣆
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣷⠈⠉⠙⠛⢻⣭⣷
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⠀⢹⣿⣷
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⠀⣾⣿⡏
+
+⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⢰⣿⣿::..
+
+ｓｐａｎｋ　ａｔ　ｌｅａｓｔ　
+
+５　ｏｔｈｅｒ　ｈｏｍｉｅｓ，　
+
+ｏｒ　ｅｌｓｅ　
+
+ｙｏｕ＇ｒｅ　ｎｏｔ　ａ　ｈｏｍｉｅ `)
             if (!isCommandline && !hasFile) throw new Error("Not a command")!
 
             if (hasFile) await DownloadAction.handleAction(message);

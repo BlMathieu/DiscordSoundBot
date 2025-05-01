@@ -5,13 +5,14 @@ import { AudioPlayerStatus, VoiceConnection } from "@discordjs/voice";
 
 class PlayAudioAction extends AbstractAction {
 
+
     public static handleAction(message: OmitPartialGroupDMChannel<Message<boolean>>, connection: VoiceConnection): void {
         try {
             let counter = 0;
 
             const soundPlayer = new SoundPlayer();
             const userDemande = message.content.split(" ");
-            const fileNames = userDemande[1].split(',');
+            const fileNames = userDemande[1].split(',').filter(f=>f != "");
             const speed = Number(userDemande[2]);
             const isLoop = userDemande[3] == "loop";
 

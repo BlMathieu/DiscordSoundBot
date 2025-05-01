@@ -12,9 +12,15 @@ class ReaderUtils {
         return files;
     }
 
-    public static writeFile(fileData: NodeJS.ArrayBufferView, fileName: string) {
-        const filePath = path.resolve(DEFAULT_PATH, fileName.replace(' ',''));
+    public static writeFile(fileData: NodeJS.ArrayBufferView, fileName: string):string {
+        const filePath = path.resolve(DEFAULT_PATH, fileName);
         fs.writeFileSync(filePath, fileData);
+        return path.basename(filePath)
+    }
+
+    public static isValidExtension(name: string): boolean {
+        const supportedFilesExt = [".mp3", ".mp4", ".wav", ".flac", ".aac", ".alac", ".wma", ".aiff", ".pcm"];
+        return supportedFilesExt.some(ext => path.extname(name.toLowerCase()) == ext);
     }
 }
 export default ReaderUtils;
