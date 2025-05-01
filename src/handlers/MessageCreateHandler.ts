@@ -6,6 +6,8 @@ import ListAction from "../actions/ListAction";
 import PlayAudioAction from "../actions/PlayAudioAction";
 import HelpAction from "../actions/HelpAction";
 import HandlerError from "../errors/HandlerError";
+import RenameAction from "../actions/RenameAction";
+import DeleteAction from "../actions/DeleteAction";
 
 class MessageCreateHandler extends AbstractHandler {
     constructor() {super();}
@@ -14,57 +16,24 @@ class MessageCreateHandler extends AbstractHandler {
         try {
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
-            const isEmote = message.content.toLocaleLowerCase().startsWith(">emote");
-            const isList = message.content.toLowerCase().startsWith('>list');
+            const askList = message.content.toLowerCase().startsWith('>list');
+            const askRename = message.content.toLowerCase().startsWith('>rename');
+            const askDelete = message.content.toLowerCase().startsWith('>delete');
             const askHelp = message.content.toLowerCase().startsWith('>help') || message.content.toLowerCase() == '>';
-            const isStop = message.content.toLowerCase().startsWith(">stop");
-            const isPlay = message.content.toLowerCase().startsWith('>play');
-            const needChannel = isPlay || isStop;
-
-            if (isEmote) message.reply(` ⢸
-
-⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣶⣄
-
-⢿⣿⣄⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣄
-
-⠀⠹⣿⣧⣀⣠⣴⣾⣷⣿⣷⠾⢷⠋⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⡷
-
-⠀⠀⠈⢿⡿⠟⢻⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⡟
-
-⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⡟⢿⣿⣄⠀⠀⠀⠀⢠⣶⣾⣿⡇
-
-⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⡇⠀⠙⠿⡿⢆⣴⣿⣿⣿⣿⡇
-
-⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⠀⠀⣤⣶⣾⣿⣿⣿⣿⣷⠹⣷⣤⣤⣄⣀⡀
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡏⣿⣿⣿⢀⣾⣿⣿⣿⣿⣏⠀⠀⢀⣀⣈⣉⣉⣉⣙⣁⣀
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⢏⣾⣿⣿⣿⣿⣿⣿⣆
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣷⠈⠉⠙⠛⢻⣭⣷
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⠀⢹⣿⣷
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⠀⣾⣿⡏
-
-⠀⠀⠀⠀⠀⢸⣿⣿⡇⣿⣿⣿⠀⠀⠀⠀⢰⣿⣿::..
-
-ｓｐａｎｋ　ａｔ　ｌｅａｓｔ　
-
-５　ｏｔｈｅｒ　ｈｏｍｉｅｓ，　
-
-ｏｒ　ｅｌｓｅ　
-
-ｙｏｕ＇ｒｅ　ｎｏｔ　ａ　ｈｏｍｉｅ `)
+            const askStop = message.content.toLowerCase().startsWith(">stop");
+            const askPlay = message.content.toLowerCase().startsWith('>play');
+            const needChannel = askPlay || askStop;
+           
             if (!isCommandline && !hasFile) throw new Error("Not a command")!
-
-            if (hasFile) await DownloadAction.handleAction(message);
-            if (isList) ListAction.handleAction(message);
-            if (askHelp) HelpAction.handleAction(message);
+            if (hasFile) await new DownloadAction(message).handleAction();
+            if (askList) new ListAction(message).handleAction();
+            if (askRename) new RenameAction(message).handleAction();
+            if (askDelete) new DeleteAction(message).handleAction();
+            if (askHelp) new HelpAction(message).handleAction();
             if (needChannel) {
                 const connection = getChannelConnection(message);
-                if (isPlay) PlayAudioAction.handleAction(message, connection);
-                if (isStop) connection.destroy();
+                if (askPlay) new PlayAudioAction(message).handleAction(connection);
+                if (askStop) connection.destroy();
             }
         }
         catch (error) {

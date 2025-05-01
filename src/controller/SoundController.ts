@@ -1,6 +1,6 @@
 import { AudioPlayer, createAudioPlayer, createAudioResource, StreamType } from "@discordjs/voice";
 import path from "path";
-import ReaderUtils from "../utils/FSUtils";
+import FSUtils from "../utils/FSUtils";
 import "dotenv/config";
 import { spawn } from "child_process";
 
@@ -13,12 +13,12 @@ class SoundPlayer {
     }
 
     public playSound(soundName: string, speed: number): AudioPlayer {
-        if(!speed) speed = 1; 
+        if (!speed) speed = 1;
         const DEFAULT_PATH = process.env.DEFAULT_PATH || "";
-        const filePath = path.resolve(`${DEFAULT_PATH}/${soundName}`);
-        ReaderUtils.checkPath(filePath);
+        const filePath = path.resolve(DEFAULT_PATH, soundName);
+        FSUtils.checkPath(filePath);
 
-        const audioFiles = ReaderUtils.getExistingAudioFilesNames();
+        const audioFiles = FSUtils.getExistingAudioFilesNames();
 
         if (!audioFiles.includes(soundName)) throw new Error("Sound does not exists !");
 

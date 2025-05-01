@@ -1,17 +1,20 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import AbstractAction from "./InterfaceAction";
+import AbstractAction from "./AbstractAction";
 import SoundPlayer from "../controller/SoundController";
 import { AudioPlayerStatus, VoiceConnection } from "@discordjs/voice";
 
 class PlayAudioAction extends AbstractAction {
 
+    constructor(message: OmitPartialGroupDMChannel<Message<boolean>>){
+        super(message);
+    }
 
-    public static handleAction(message: OmitPartialGroupDMChannel<Message<boolean>>, connection: VoiceConnection): void {
+    public handleAction(connection: VoiceConnection): void {
         try {
             let counter = 0;
 
             const soundPlayer = new SoundPlayer();
-            const userDemande = message.content.split(" ");
+            const userDemande = this.message.content.split(" ");
             const fileNames = userDemande[1].split(',').filter(f=>f != "");
             const speed = Number(userDemande[2]);
             const isLoop = userDemande[3] == "loop";
@@ -29,7 +32,7 @@ class PlayAudioAction extends AbstractAction {
                     }
                     else {
                         connection.destroy();
-                        message.channel.send("Lecture terminé !");
+                        this.message.channel.send("Lecture terminé !");
                     }
                 } catch (error) {
                     console.error(error)

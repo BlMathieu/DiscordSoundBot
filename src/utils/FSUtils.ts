@@ -1,9 +1,10 @@
 import fs from "fs";
 import "dotenv/config";
 import path from "path";
+
 const DEFAULT_PATH = process.env.DEFAULT_PATH || "";
 
-class ReaderUtils {
+class FSUtils {
     public static checkPath(filePath: string) {
         if (!filePath.includes(DEFAULT_PATH)) throw new Error("Forbidden path !");
     }
@@ -12,10 +13,29 @@ class ReaderUtils {
         return files;
     }
 
-    public static writeFile(fileData: NodeJS.ArrayBufferView, fileName: string):string {
+    public static writeFile(fileData: NodeJS.ArrayBufferView, fileName: string): string {
         const filePath = path.resolve(DEFAULT_PATH, fileName);
+        this.checkPath(filePath);
         fs.writeFileSync(filePath, fileData);
         return path.basename(filePath)
+    }
+
+    public static renameFile(oldName: string, newName: string): { old: string, new: string } {
+        const oldPath = path.resolve(DEFAULT_PATH, oldName);
+        const newPath = path.resolve(DEFAULT_PATH, newName);
+        this.checkPath(oldPath);
+        this.checkPath(newPath);
+        fs.renameSync(oldPath, newPath);
+        const oldBase = path.basename(oldPath);
+        const newBase = path.basename(newPath);
+        return { old: oldBase, new: newBase }
+    }
+
+    public static deleteFile(fileName:string){
+        const filePath = path.resolve(DEFAULT_PATH,fileName);
+        this.checkPath(filePath);
+        fs.rmSync(filePath);
+        return path.basename(filePath);
     }
 
     public static isValidExtension(name: string): boolean {
@@ -23,4 +43,4 @@ class ReaderUtils {
         return supportedFilesExt.some(ext => path.extname(name.toLowerCase()) == ext);
     }
 }
-export default ReaderUtils;
+export default FSUtils;
