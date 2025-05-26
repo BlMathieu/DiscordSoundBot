@@ -13,16 +13,23 @@ class SoundPlayer {
     }
 
     public playSound(soundName: string, speed: number): AudioPlayer {
-        if (!speed) speed = 1;
+        if(!speed) speed = 1;
+        
+        // FILE PATH
         const filePath = path.resolve(DEFAULT_PATH, soundName);
         FSUtils.checkPath(filePath);
 
+        // AUDIO FILES
         const audioFiles = FSUtils.getExistingAudioFilesNames();
-
         if (!audioFiles.includes(soundName)) throw new Error("Sound does not exists !");
 
+        // RESSOURCES
         const ressource = this.createFastAudioResource(filePath, speed);
+
+        // PLAY AUDIO
         this.player.play(ressource);
+
+
         return this.player;
     }
 

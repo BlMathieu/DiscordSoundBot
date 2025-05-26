@@ -1,7 +1,7 @@
 import { OmitPartialGroupDMChannel, Message } from "discord.js";
 import AbstractAction from "./AbstractAction";
 import { VoiceConnection } from "@discordjs/voice";
-import { spawnSync } from "child_process";
+import { spawn, spawnSync } from "child_process";
 import { DEFAULT_PATH } from "../constantes/path_const";
 import FSUtils from "../utils/FSUtils";
 
@@ -28,13 +28,14 @@ class YTAction extends AbstractAction {
             ytURL
         ];
 
-        const request = spawnSync("yt-dlp", args);
-        if (request.status === 0) this.message.reply(`Le fichier ${fileName} à été ajouté avec succès !`);
-        else this.message.reply("Une erreur est survenu lors du téléchargement du fichier !");
+        const request = spawn("yt-dlp", args);
+        request.on("error", () => {
+            this.message.reply("Une erreur est survenu lors du téléchargement du fichier !");
+        });
+        request.on('close', () => {
+            this.message.reply(`Le fichier ${fileName} à été ajouté avec succès !`);
+        });
 
-        console.log("STATUT : ", request.status);
-        console.log("SORTIE : ", request.stdout.toString());
-        console.log("ERREUR : ", request.stderr.toString());
     }
 }
 

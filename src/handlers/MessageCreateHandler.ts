@@ -15,6 +15,7 @@ class MessageCreateHandler extends AbstractHandler {
 
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
+            // COMMANDLINES
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
             const askList = message.content.toLowerCase().startsWith('>list');
@@ -26,6 +27,7 @@ class MessageCreateHandler extends AbstractHandler {
             const askYt = message.content.toLowerCase().startsWith('>yt add');
             const needChannel = askPlay || askStop;
 
+            // ACTIONS
             if (!isCommandline && !hasFile) throw new Error("Not a command")!
             if (hasFile) await new DownloadAction(message).handleAction();
             if (askList) new ListAction(message).handleAction();
@@ -33,17 +35,14 @@ class MessageCreateHandler extends AbstractHandler {
             if (askDelete) new DeleteAction(message).handleAction();
             if (askHelp) new HelpAction(message).handleAction();
             if (askYt) new YTAction(message).handleAction();
-                if (needChannel) {
-                    const connection = getChannelConnection(message);
-                    if (askPlay) new PlayAudioAction(message).handleAction(connection);
-                    if (askStop) connection.destroy();
-                }
+            if (needChannel) {
+                const connection = getChannelConnection(message);
+                if (askPlay) new PlayAudioAction(message).handleAction(connection);
+                if (askStop) connection.destroy();
+            }
         }
         catch (error) {
-            if (error instanceof HandlerError) {
-                console.error(error);
-                message.reply(error.message);
-            }
+            if (error instanceof HandlerError) message.reply(error.message);
         }
     }
 }

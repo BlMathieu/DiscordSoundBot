@@ -6,24 +6,27 @@ import HandlerError from "../errors/HandlerError";
 
 class DownloadAction extends AbstractAction {
 
-    constructor(message: OmitPartialGroupDMChannel<Message<boolean>>){
+    constructor(message: OmitPartialGroupDMChannel<Message<boolean>>) {
         super(message);
     }
 
     public async handleAction(): Promise<void> {
         const attachment = this.message.attachments.first();
-        if (attachment) {
-            const url = attachment.url;
-            const fileName = attachment.name
+        if (!attachment) throw new HandlerError("Aucun fichier trouvé !");
 
-            if (!FSUtils.isValidExtension(fileName)) throw new HandlerError("Incorrect file extension !");
+        const url = attachment.url;
+        const fileName = attachment.name
 
-            const existingFiles = FSUtils.getExistingAudioFilesNames();
-            if (existingFiles.includes(fileName)) throw new HandlerError('File already exists !');
-            const data = await axios.get(url, { responseType: 'arraybuffer' });
-            const cleanName = FSUtils.writeFile(data.data, fileName);
-            this.message.reply(`'${cleanName}' a été ajouté !`);
-        }
+        // CHECKING FILE VALIDITY
+        if (!FSUtils.isValidExtension(fileName)) throw new HandlerError("Incorrect file extension !");
+        const existingFiles = FSUtils.getExistingAudioFilesNames();
+        if (existingFiles.includes(fileName)) throw new HandlerError('File already exists !');
+
+        // WRITE FILE
+        const data = await axios.get(url, { responseType: 'arraybuffer' });
+        const cleanName = FSUtils.writeFile(data.data, fileName);
+
+        this.message.reply(`'${cleanName}' a été ajouté !`);
     }
 }
 export default DownloadAction;
