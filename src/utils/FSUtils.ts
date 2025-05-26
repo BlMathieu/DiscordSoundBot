@@ -1,8 +1,7 @@
 import fs from "fs";
-import "dotenv/config";
 import path from "path";
+import { DEFAULT_PATH } from "../constantes/path_const";
 
-const DEFAULT_PATH = process.env.DEFAULT_PATH || "";
 
 class FSUtils {
     public static checkPath(filePath: string) {

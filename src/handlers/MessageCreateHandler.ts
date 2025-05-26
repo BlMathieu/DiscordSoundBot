@@ -8,9 +8,10 @@ import HelpAction from "../actions/HelpAction";
 import HandlerError from "../errors/HandlerError";
 import RenameAction from "../actions/RenameAction";
 import DeleteAction from "../actions/DeleteAction";
+import YTAction from "../actions/YTAction";
 
 class MessageCreateHandler extends AbstractHandler {
-    constructor() {super();}
+    constructor() { super(); }
 
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
@@ -22,19 +23,21 @@ class MessageCreateHandler extends AbstractHandler {
             const askHelp = message.content.toLowerCase().startsWith('>help') || message.content.toLowerCase() == '>';
             const askStop = message.content.toLowerCase().startsWith(">stop");
             const askPlay = message.content.toLowerCase().startsWith('>play');
+            const askYt = message.content.toLowerCase().startsWith('>yt add');
             const needChannel = askPlay || askStop;
-           
+
             if (!isCommandline && !hasFile) throw new Error("Not a command")!
             if (hasFile) await new DownloadAction(message).handleAction();
             if (askList) new ListAction(message).handleAction();
             if (askRename) new RenameAction(message).handleAction();
             if (askDelete) new DeleteAction(message).handleAction();
             if (askHelp) new HelpAction(message).handleAction();
-            if (needChannel) {
-                const connection = getChannelConnection(message);
-                if (askPlay) new PlayAudioAction(message).handleAction(connection);
-                if (askStop) connection.destroy();
-            }
+            if (askYt) new YTAction(message).handleAction();
+                if (needChannel) {
+                    const connection = getChannelConnection(message);
+                    if (askPlay) new PlayAudioAction(message).handleAction(connection);
+                    if (askStop) connection.destroy();
+                }
         }
         catch (error) {
             if (error instanceof HandlerError) {

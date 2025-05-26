@@ -1,8 +1,8 @@
 import { AudioPlayer, createAudioPlayer, createAudioResource, StreamType } from "@discordjs/voice";
 import path from "path";
 import FSUtils from "../utils/FSUtils";
-import "dotenv/config";
 import { spawn } from "child_process";
+import { DEFAULT_PATH } from "../constantes/path_const";
 
 class SoundPlayer {
 
@@ -14,7 +14,6 @@ class SoundPlayer {
 
     public playSound(soundName: string, speed: number): AudioPlayer {
         if (!speed) speed = 1;
-        const DEFAULT_PATH = process.env.DEFAULT_PATH || "";
         const filePath = path.resolve(DEFAULT_PATH, soundName);
         FSUtils.checkPath(filePath);
 
