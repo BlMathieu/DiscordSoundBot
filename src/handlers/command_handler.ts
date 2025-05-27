@@ -11,12 +11,14 @@ import DeleteAction from "../actions/delete_action";
 import YTDownloadAction from "../actions/yt_download_action";
 import { QUOICOUBEH } from "../constantes/trash_const";
 import SearchAction from "../actions/search_action";
+import AntiHarrasmentAction from "../actions/anti_harrasment_action";
 
 class CommandHandler extends AbstractHandler {
     constructor() { super(); }
 
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
+            new AntiHarrasmentAction(message).handleAction();
             if(message.content.toLowerCase().endsWith("quoi")) message.reply(QUOICOUBEH);
 
             const hasFile = message.attachments.size > 0;

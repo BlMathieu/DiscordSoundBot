@@ -6,6 +6,7 @@ class SearchAction extends AbstractAction {
     constructor(message: OmitPartialGroupDMChannel<Message<boolean>>) {
         super(message)
     }
+
     public handleAction(): void {
         const args = this.message.content.split(' ').filter(m => m != "");
         const nameToSearch = args[1];
