@@ -19,7 +19,7 @@ class YTDownloadAction extends AbstractAction {
 
         const validFilePath = path.resolve(DEFAULT_PATH, fileName);
 
-        if (!AudioFileValidityUtils.doesAudioFileAlreadyExists(validFilePath)) throw new HandlerError(`Le fichier existe déjà !`);
+        if (AudioFileValidityUtils.doesAudioFileAlreadyExists(validFilePath)) throw new HandlerError(`Le fichier existe déjà !`);
         if (!AudioFileValidityUtils.isAudioFilePathValid(validFilePath)) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
 
         const args = [
