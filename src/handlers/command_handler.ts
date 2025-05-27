@@ -9,6 +9,7 @@ import HandlerError from "../errors/handler_error";
 import RenameAction from "../actions/rename_action";
 import DeleteAction from "../actions/delete_action";
 import YTDownloadAction from "../actions/yt_download_action";
+import { QUOICOUBEH } from "../constantes/trash_const";
 
 class CommandHandler extends AbstractHandler {
     constructor() { super(); }
