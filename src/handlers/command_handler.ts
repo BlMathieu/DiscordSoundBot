@@ -9,7 +9,7 @@ import HandlerError from "../errors/handler_error";
 import RenameAction from "../actions/rename_action";
 import DeleteAction from "../actions/delete_action";
 import YTDownloadAction from "../actions/yt_download_action";
-import { QUOICOUBEH } from "../constantes/trash_const";
+import { QUOICOUBEH, QUOITRIGGER } from "../constantes/trash_const";
 import SearchAction from "../actions/search_action";
 import AntiHarrasmentAction from "../actions/anti_harrasment_action";
 
@@ -19,7 +19,7 @@ class CommandHandler extends AbstractHandler {
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
             new AntiHarrasmentAction(message).handleAction();
-            if(message.content.toLowerCase().split(" ").includes("quoi")) message.reply(QUOICOUBEH);
+            if(QUOITRIGGER.some(q=>message.content.toLowerCase().split(" ").includes(q.toLowerCase()))) message.reply(QUOICOUBEH);
 
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
