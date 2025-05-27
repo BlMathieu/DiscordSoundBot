@@ -37,18 +37,18 @@ export default class AudioFileUtils {
 
         const isOldPathValid = AudioFileValidityUtils.isAudioFilePathValid(oldFilePath);
         const isNewPathValid = AudioFileValidityUtils.isAudioFilePathValid(newFilePath);
-        
-        if(!isOldPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
-        if(!isNewPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
+
+        if (!isOldPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
+        if (!isNewPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
 
         fs.renameSync(oldFilePath, newFilePath);
     }
 
     public static deleteAudioFile(fileName: string): void {
-        AudioFileValidityUtils.doesAudioFileAlreadyExists(fileName);
+        if (!AudioFileValidityUtils.doesAudioFileAlreadyExists(fileName)) throw new HandlerError(`Le fichier n'existe pas !`);
 
         const filePath = path.resolve(DEFAULT_PATH, fileName);
-        AudioFileValidityUtils.isAudioFilePathValid(filePath);
+        if (!AudioFileValidityUtils.isAudioFilePathValid(filePath)) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
 
         fs.rmSync(filePath);
     }

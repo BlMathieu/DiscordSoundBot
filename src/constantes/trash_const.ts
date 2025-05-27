@@ -1,0 +1,1 @@
+const QUOICOUBEH = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.getmidnight.com%2F45d07b00b0188a892509950ff919e14e%2F2023%2F07%2Fquoicoubeh-exemples-ados-LanguageTool.png&f=1&nofb=1&ipt=768447f303b20276337b6e027687848503b7132a381dad9ac3008f0971ffdaa9";

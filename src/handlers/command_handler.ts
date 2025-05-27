@@ -15,6 +15,8 @@ class CommandHandler extends AbstractHandler {
 
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
+            if(message.content.toLowerCase().endsWith("quoi")) message.reply(QUOICOUBEH);
+
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
             const askList = message.content.toLowerCase().startsWith('>list');
