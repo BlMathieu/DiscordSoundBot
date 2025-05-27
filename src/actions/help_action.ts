@@ -1,5 +1,5 @@
 import { VoiceConnection } from "@discordjs/voice";
-import AbstractAction from "./AbstractAction";
+import AbstractAction from "./abstract_action";
 
 class HelpAction extends AbstractAction {
     public handleAction(connection?: VoiceConnection): void {

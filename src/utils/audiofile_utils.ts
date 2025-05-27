@@ -1,0 +1,56 @@
+import fs from "fs";
+import path from "path";
+import { DEFAULT_PATH } from "../constantes/path_const";
+import AudioFileValidityUtils from "./audiofile_validity_utils";
+import HandlerError from "../errors/handler_error";
+
+
+export default class AudioFileUtils {
+
+    public static getExistingAudioFilesNames(): string[] {
+        const files = fs.readdirSync(DEFAULT_PATH);
+        return files;
+    }
+
+    public static writeAudioFile(fileData: NodeJS.ArrayBufferView, fileName: string): void {
+        const filePath = path.resolve(DEFAULT_PATH, fileName);
+
+        const isPathValid = AudioFileValidityUtils.isAudioFilePathValid(filePath)
+        const isExtensionValid = AudioFileValidityUtils.isAudioFileExtensionValid(fileName)
+
+        if (!isPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
+        if (!isExtensionValid) throw new HandlerError(`L'extension du fichier n'est pas valide !`);
+
+        fs.writeFileSync(filePath, fileData);
+    }
+
+    public static renameAudioFile(oldName: string, newName: string): void {
+
+        const isOldExtensionValid = AudioFileValidityUtils.isAudioFileExtensionValid(oldName);
+        const isNewExtensionValid = AudioFileValidityUtils.isAudioFileExtensionValid(newName);
+
+        if (!isOldExtensionValid) throw new HandlerError(`L'extension n'est pas valide !`);
+        if (!isNewExtensionValid) throw new HandlerError(`L'extension n'est pas valide !`);
+
+        const oldFilePath = path.resolve(DEFAULT_PATH, oldName);
+        const newFilePath = path.resolve(DEFAULT_PATH, newName);
+
+        const isOldPathValid = AudioFileValidityUtils.isAudioFilePathValid(oldFilePath);
+        const isNewPathValid = AudioFileValidityUtils.isAudioFilePathValid(newFilePath);
+        
+        if(!isOldPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
+        if(!isNewPathValid) throw new HandlerError(`Le chemin du fichier n'est pas valide !`);
+
+        fs.renameSync(oldFilePath, newFilePath);
+    }
+
+    public static deleteAudioFile(fileName: string): void {
+        AudioFileValidityUtils.doesAudioFileAlreadyExists(fileName);
+
+        const filePath = path.resolve(DEFAULT_PATH, fileName);
+        AudioFileValidityUtils.isAudioFilePathValid(filePath);
+
+        fs.rmSync(filePath);
+    }
+
+}

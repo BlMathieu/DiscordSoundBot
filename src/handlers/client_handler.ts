@@ -1,7 +1,7 @@
 import { Client } from "discord.js";
-import AbstractHandler from './AbstractHandler';
+import AbstractHandler from './abstract_handler';
 
-class ClientReadyHandler extends AbstractHandler {
+class ClientHandler extends AbstractHandler {
     constructor() { super(); }
 
     public processHandler(readyClient: Client<true>): void {
@@ -9,4 +9,4 @@ class ClientReadyHandler extends AbstractHandler {
     }
 }
 
-export default ClientReadyHandler;
+export default ClientHandler;

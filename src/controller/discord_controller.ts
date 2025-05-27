@@ -1,7 +1,7 @@
 import { Client, Events, GatewayIntentBits} from "discord.js";
 import "dotenv/config";
-import ClientReadyHandler from "../handlers/ClientReadyHandler";
-import MessageCreateHandler from "../handlers/MessageCreateHandler";
+import ClientHandler from "../handlers/client_handler";
+import CommandHandler from "../handlers/command_handler";
 
 class DiscordController {
     private client: Client;
@@ -24,8 +24,8 @@ class DiscordController {
     }
 
     public listen() {
-        const clientReady = new ClientReadyHandler();
-        const messageCreate = new MessageCreateHandler();
+        const clientReady = new ClientHandler();
+        const messageCreate = new CommandHandler();
         this.client.once(Events.ClientReady, clientReady.processHandler)
         this.client.on(Events.MessageCreate, messageCreate.processHandler);
     }

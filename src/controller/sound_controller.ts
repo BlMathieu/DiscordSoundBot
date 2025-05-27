@@ -1,8 +1,9 @@
 import { AudioPlayer, createAudioPlayer, createAudioResource, StreamType } from "@discordjs/voice";
 import path from "path";
-import FSUtils from "../utils/FSUtils";
 import { spawn } from "child_process";
 import { DEFAULT_PATH } from "../constantes/path_const";
+import AudioFileValidityUtils from "../utils/audiofile_validity_utils";
+import HandlerError from "../errors/handler_error";
 
 class SoundPlayer {
 
@@ -13,22 +14,15 @@ class SoundPlayer {
     }
 
     public playSound(soundName: string, speed: number): AudioPlayer {
-        if(!speed) speed = 1;
-        
-        // FILE PATH
+        if (!speed) speed = 1;
+
         const filePath = path.resolve(DEFAULT_PATH, soundName);
-        FSUtils.checkPath(filePath);
 
-        // AUDIO FILES
-        const audioFiles = FSUtils.getExistingAudioFilesNames();
-        if (!audioFiles.includes(soundName)) throw new Error("Sound does not exists !");
+        if (!AudioFileValidityUtils.isAudioFilePathValid(filePath)) throw new HandlerError("Le chemin du fichier n'est pas valide ! ");
+        if (!AudioFileValidityUtils.doesAudioFileAlreadyExists(soundName)) throw new HandlerError(`Le fichier n'existe pas !`);
 
-        // RESSOURCES
         const ressource = this.createFastAudioResource(filePath, speed);
-
-        // PLAY AUDIO
         this.player.play(ressource);
-
 
         return this.player;
     }

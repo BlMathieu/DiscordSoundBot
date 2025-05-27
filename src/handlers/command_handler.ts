@@ -1,21 +1,20 @@
 import { joinVoiceChannel, VoiceConnection } from "@discordjs/voice";
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import AbstractHandler from "./AbstractHandler";
-import DownloadAction from "../actions/DownloadAction";
-import ListAction from "../actions/ListAction";
-import PlayAudioAction from "../actions/PlayAudioAction";
-import HelpAction from "../actions/HelpAction";
-import HandlerError from "../errors/HandlerError";
-import RenameAction from "../actions/RenameAction";
-import DeleteAction from "../actions/DeleteAction";
-import YTAction from "../actions/YTAction";
+import AbstractHandler from "./abstract_handler";
+import DownloadAction from "../actions/download_action";
+import ListAction from "../actions/list_action";
+import PlayAudioAction from "../actions/play_audio_action";
+import HelpAction from "../actions/help_action";
+import HandlerError from "../errors/handler_error";
+import RenameAction from "../actions/rename_action";
+import DeleteAction from "../actions/delete_action";
+import YTDownloadAction from "../actions/yt_download_action";
 
-class MessageCreateHandler extends AbstractHandler {
+class CommandHandler extends AbstractHandler {
     constructor() { super(); }
 
     public async processHandler(message: OmitPartialGroupDMChannel<Message<boolean>>): Promise<void> {
         try {
-            // COMMANDLINES
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
             const askList = message.content.toLowerCase().startsWith('>list');
@@ -27,14 +26,16 @@ class MessageCreateHandler extends AbstractHandler {
             const askYt = message.content.toLowerCase().startsWith('>yt add');
             const needChannel = askPlay || askStop;
 
-            // ACTIONS
+
             if (!isCommandline && !hasFile) throw new Error("Not a command")!
+
             if (hasFile) await new DownloadAction(message).handleAction();
             if (askList) new ListAction(message).handleAction();
             if (askRename) new RenameAction(message).handleAction();
             if (askDelete) new DeleteAction(message).handleAction();
             if (askHelp) new HelpAction(message).handleAction();
-            if (askYt) new YTAction(message).handleAction();
+            if (askYt) new YTDownloadAction(message).handleAction();
+
             if (needChannel) {
                 const connection = getChannelConnection(message);
                 if (askPlay) new PlayAudioAction(message).handleAction(connection);
@@ -47,16 +48,18 @@ class MessageCreateHandler extends AbstractHandler {
     }
 }
 
-export default MessageCreateHandler;
+export default CommandHandler;
 
 function getChannelConnection(message: OmitPartialGroupDMChannel<Message<boolean>>): VoiceConnection {
     const channel = message.member?.voice.channel;
     if (!channel) throw new HandlerError('Not in vocal channel !');
+
     const connection = joinVoiceChannel({
         channelId: channel.id,
         guildId: channel?.guild.id,
         adapterCreator: channel?.guild.voiceAdapterCreator,
         selfDeaf: false,
     });
+
     return connection
 }

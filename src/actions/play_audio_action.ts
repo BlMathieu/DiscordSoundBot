@@ -1,11 +1,7 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import AbstractAction from "./AbstractAction";
-import SoundPlayer from "../controller/SoundController";
-import { AudioPlayerStatus, createAudioPlayer, createAudioResource, VoiceConnection } from "@discordjs/voice";
-import path from "path";
-import { DEFAULT_PATH } from "../constantes/path_const";
-import FSUtils from "../utils/FSUtils";
-import { VoiceConnectionStatus } from "@discordjs/voice";
+import AbstractAction from "./abstract_action";
+import SoundPlayer from "../controller/sound_controller";
+import { AudioPlayerStatus, VoiceConnection } from "@discordjs/voice";
 
 class PlayAudioAction extends AbstractAction {
 
@@ -15,7 +11,6 @@ class PlayAudioAction extends AbstractAction {
 
     public handleAction(connection: VoiceConnection): void {
         try {
-            // VARIABLES 
             let counter = 0;
             const soundPlayer = new SoundPlayer();
             const userDemande = this.message.content.split(" ");
@@ -23,11 +18,9 @@ class PlayAudioAction extends AbstractAction {
             const speed = Number(userDemande[2]);
             const isLoop = userDemande[3] === "loop";
 
-            // CONNECT SOUND
             const sound = soundPlayer.playSound(fileNames[0], speed);
             connection.subscribe(sound);
 
-            // MANAGE SOUNDS
             sound.on(AudioPlayerStatus.Idle, () => this.onIdle(connection, isLoop, counter, fileNames, soundPlayer, speed));
 
         } catch (error) {
@@ -44,8 +37,7 @@ class PlayAudioAction extends AbstractAction {
             if (counter < fileNames.length) {
                 const sound = soundPlayer.playSound(fileNames[counter], speed);
                 connection.subscribe(sound);
-            }
-            else {
+            } else {
                 connection.destroy();
                 this.message.channel.send("Lecture terminé !");
             }
