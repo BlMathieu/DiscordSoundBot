@@ -21,6 +21,7 @@ class CommandHandler extends AbstractHandler {
             const hasFile = message.attachments.size > 0;
             const isCommandline = message.content.startsWith('>');
             const askList = message.content.toLowerCase().startsWith('>list');
+            const askSearch = message.content.toLowerCase().startsWith('>search');
             const askRename = message.content.toLowerCase().startsWith('>rename');
             const askDelete = message.content.toLowerCase().startsWith('>delete');
             const askHelp = message.content.toLowerCase().startsWith('>help') || message.content.toLowerCase() == '>';
@@ -34,6 +35,7 @@ class CommandHandler extends AbstractHandler {
 
             if (hasFile) await new DownloadAction(message).handleAction();
             if (askList) new ListAction(message).handleAction();
+            if (askSearch) new SearchAction(message).handleAction();
             if (askRename) new RenameAction(message).handleAction();
             if (askDelete) new DeleteAction(message).handleAction();
             if (askHelp) new HelpAction(message).handleAction();

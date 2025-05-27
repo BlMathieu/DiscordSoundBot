@@ -9,7 +9,7 @@ class ListAction extends AbstractAction {
     public handleAction(): void {
         const files = AudioFileUtils.getExistingAudioFilesNames();
 
-        const display = files.map((file) => { return `${file},\n`; })
+        const display = files.map((file) => { return `${file}\n`; })
 
         this.message.reply(`Liste :\n${display}`);
     }    
