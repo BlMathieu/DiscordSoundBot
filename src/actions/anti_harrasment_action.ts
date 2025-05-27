@@ -9,10 +9,11 @@ export default class AntiHarrasmentAction extends AbstractAction {
     }
 
     public handleAction(connection?: VoiceConnection): void {
-        const callConnor = NAMES.some(n => this.message.content.toLowerCase().split(" ").includes(n.toLowerCase()));
+        const messageArray = this.message.content.toLowerCase().split(" ");
+        const callConnor = NAMES.some(n => messageArray.includes(n.toLowerCase()));
         if (callConnor) {
-            const insultFR = INJURIES_FR.some(i => this.message.content.toLowerCase().includes(i.toLowerCase()));
-            const insultEN = INJURIES_EN.some(i => this.message.content.toLowerCase().includes(i.toLowerCase()));
+            const insultFR = INJURIES_FR.some(i => messageArray.includes(i.toLowerCase()));
+            const insultEN = INJURIES_EN.some(i => messageArray.includes(i.toLowerCase()));
             if (insultFR || insultEN) {
                 const index = Math.floor(Math.random() * CONNOR_RESPONSE.length);
                 const response = CONNOR_RESPONSE[index];
