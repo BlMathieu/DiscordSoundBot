@@ -6,6 +6,7 @@ import DownloadAction from "../actions/DownloadAction";
 import ListAction from "../actions/ListAction";
 import PlayAudioAction from "../actions/PlayAction";
 import RenameAction from "../actions/RenameAction";
+import StopAction from "../actions/StopAction";
 import YTDownloadAction from "../actions/YTDownloadAction";
 import ClientHandler from "../handlers/ClientHandler";
 import CommandHandler from "../handlers/CommandHandler";
@@ -35,7 +36,7 @@ class DiscordController {
         this.TOKEN = process.env.TOKEN || "";
         this.restClient = new REST().setToken(this.TOKEN);
 
-        this.actions = [new PlayAudioAction(), new RenameAction(), new DeleteAction(), new YTDownloadAction(), new DownloadAction(), new ListAction()];
+        this.actions = [new PlayAudioAction(), new RenameAction(), new DeleteAction(), new YTDownloadAction(), new DownloadAction(), new ListAction(), new StopAction()];
     }
 
     public async login() {

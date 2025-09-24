@@ -26,7 +26,6 @@ class StopAction extends AbstractAction {
 
         message.reply("Channel quitté !");
     }
-
-
-
 }
+
+export default StopAction;
