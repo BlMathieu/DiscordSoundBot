@@ -21,7 +21,7 @@ class ListAction extends AbstractAction {
         const reply = new EmbedBuilder()
             .setTitle("Liste des fichiers disponible")
             .setDescription("Voici la liste des fichiers disponible :")
-            .addFields(files.map(f => ({ name: "###", value: f })));
+            .addFields({ name: "Fichiers", value: files.join("\n") });
 
         message.reply({ embeds: [reply] });
     }
