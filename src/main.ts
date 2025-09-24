@@ -1,6 +1,7 @@
-import DiscordController from "./controller/discord_controller";
+import DiscordController from "./controller/DiscordController";
 
 const discord = new DiscordController();
 
-discord.listen();
 discord.login();
+discord.registerCommands();
+discord.listen();

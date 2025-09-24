@@ -1,6 +1,6 @@
 import path from "path";
-import { DEFAULT_PATH } from "../constantes/path_const";
-import AudioFileUtils from "./audiofile_utils";
+import { DEFAULT_PATH } from "../constantes/PathConstante";
+import AudioFileUtils from "./FileUtil";
 
 export default class AudioFileValidityUtils {
 
@@ -19,5 +19,4 @@ export default class AudioFileValidityUtils {
         const existingFiles = AudioFileUtils.getExistingAudioFilesNames();
         return existingFiles.includes(fileName);
     }
-
 }

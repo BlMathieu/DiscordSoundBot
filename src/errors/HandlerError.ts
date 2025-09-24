@@ -1,5 +1,5 @@
-class HandlerError extends Error{
-    constructor(message:string){
+class HandlerError extends Error {
+    constructor(message: string) {
         super();
         this.message = message;
     }

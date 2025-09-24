@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import AbstractHandler from './abstract_handler';
+import AbstractHandler from './AbstractHandler';
 
 class ClientHandler extends AbstractHandler {
     constructor() { super(); }
