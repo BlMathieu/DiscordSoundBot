@@ -1,7 +1,8 @@
 services:
   nodejs:
     container_name: discord_bot
-    build: . 
+    build: .
+    restart: always
     volumes:
       - ../:/app/discordBot
     command: >
