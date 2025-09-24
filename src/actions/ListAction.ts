@@ -11,7 +11,7 @@ class ListAction extends AbstractAction {
     public getCommand(): SlashCommandOptionsOnlyBuilder {
         const command = new SlashCommandBuilder()
             .setName("list")
-            .setDescription("Liste les fichiers disponible")
+            .setDescription("List all available files")
 
         return command;
     }
