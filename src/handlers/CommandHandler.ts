@@ -16,6 +16,7 @@ class CommandHandler extends AbstractHandler {
         if (a.canHandle(command)) a.handleAction(interaction);
       });
     } catch (error: any) {
+      console.error(error);
       interaction.reply(error.message);
     }
   }
